@@ -16,7 +16,7 @@ const SearchTask = ({ taskList, searchList }) => {
 
         const searchMatch = taskList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
 
-        searchList(searchMatch)
+        searchList(searchMatch, searchTaskName)
 
     }, [searchTaskName])
 

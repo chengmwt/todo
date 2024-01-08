@@ -22,6 +22,8 @@ const TaskList = () => {
 
     const [searchFilteredList, setSearchFilteredList] = useState([])
 
+    const [searching, setSearching] = useState(false)
+
 
 
     // =================================== Localstorage ==================================
@@ -105,12 +107,21 @@ const TaskList = () => {
     // =================================== Search Task ==================================
 
 
-    const searchList = (searchMatch) => {
+    const searchList = (searchMatch, searchTaskName) => {
 
-        console.log(searchMatch)
-        setSearchFilteredList(searchMatch)
+        if (searchTaskName.length !== 0) {
+
+            setSearching(true)
+            console.log(searchMatch)
+            setSearchFilteredList(searchMatch)
+        } else {
+            setSearching(false)
+        }
+
 
     }
+
+    console.log(Boolean(searchFilteredList))
 
 
 
@@ -138,9 +149,9 @@ const TaskList = () => {
             <div className="task_list">
                 <AddTask addTaskItem={addTaskItem} taskList={taskList} />
                 <ul className={hiddenTaskList}>
-                    {searchFilteredList
+                    {searching
 
-                        ? (searchFilteredList.map((taskItem) => <TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
+                        ? (searchFilteredList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />)))
 
                         : (taskList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />
                         )))
