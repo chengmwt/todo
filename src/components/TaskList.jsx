@@ -20,7 +20,8 @@ const TaskList = () => {
 
     // const [searchTaskName, setSearchTaskName] = useState('')
 
-    const [searchFilteredList, setSearchFilteredList] = useState([])
+    const [searchTaskFilteredList, setSearchTaskFilteredList] = useState([])
+    const [searchCompletedFilteredList, setSearchCompletedFilteredList] = useState([])
 
     const [searching, setSearching] = useState(false)
 
@@ -107,21 +108,18 @@ const TaskList = () => {
     // =================================== Search Task ==================================
 
 
-    const searchList = (searchMatch, searchTaskName) => {
+    const searchList = (searchTaskMatch, searchCompletedMatch, searchTaskName) => {
 
         if (searchTaskName.length !== 0) {
 
             setSearching(true)
-            console.log(searchMatch)
-            setSearchFilteredList(searchMatch)
+            setSearchTaskFilteredList(searchTaskMatch)
+            setSearchCompletedFilteredList(searchCompletedMatch)
         } else {
             setSearching(false)
         }
 
-
     }
-
-    console.log(Boolean(searchFilteredList))
 
 
 
@@ -139,7 +137,7 @@ const TaskList = () => {
                 <h1>To-do</h1>
 
                 <div className='search'>
-                    <SearchTask taskList={taskList} searchList={searchList} />
+                    <SearchTask taskList={taskList} completedList={completedList} searchList={searchList} />
                 </div>
 
 
@@ -151,7 +149,7 @@ const TaskList = () => {
                 <ul className={hiddenTaskList}>
                     {searching
 
-                        ? (searchFilteredList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />)))
+                        ? (searchTaskFilteredList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />)))
 
                         : (taskList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />
                         )))
@@ -177,11 +175,19 @@ const TaskList = () => {
             <div className="completed_list">
 
                 <ul className={hiddenCompletedList}>
-                    {completedList.map((taskItem) => (
-                        // Maps the completedList array with individual task items
 
-                        <TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={completedList} list={'completed'} />
-                    ))}
+                    {searching
+
+                        ? (searchCompletedFilteredList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />)))
+
+                        : (completedList.map((taskItem) => (
+                            // Maps the completedList array with individual task items
+
+                            <TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={completedList} list={'completed'} />
+                        )))
+                    }
+
+
                 </ul>
             </div>
 
