@@ -13,8 +13,9 @@ const TaskList = () => {
 
     const [completedList, setCompletedList] = useState(JSON.parse(localStorage.getItem('completedList')) ?? [])
 
-    const [hiddenTaskList, setHiddenTaskList] = useState(JSON.parse(localStorage.getItem('hiddenTaskList')) ?? [])
-    const [hiddenCompletedList, setHiddenCompletedList] = useState(JSON.parse(localStorage.getItem('hiddenCompletedList')) ?? [])
+    const [hiddenTaskList, setHiddenTaskList] = useState(JSON.parse(localStorage.getItem('hiddenTaskList')) ?? '')
+
+    const [hiddenCompletedList, setHiddenCompletedList] = useState(JSON.parse(localStorage.getItem('hiddenCompletedList')) ?? '')
 
 
 
