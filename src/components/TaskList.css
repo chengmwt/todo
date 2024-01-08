@@ -29,7 +29,7 @@ ul {
 
 .list_header {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     margin-top: 50px;
     border-bottom: 3px black solid;
@@ -40,8 +40,9 @@ h1 {
     margin: 0;
 }
 
-.spacer {
-    visibility: hidden;
+.search {
+    display: flex;
+    justify-content: flex-end;
     flex-basis: 0;
     flex-grow: 1;
 }

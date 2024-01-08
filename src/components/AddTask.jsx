@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './AddTask.css'
 import { IoMdAdd } from "react-icons/io";
 
-const AddTask = ({ addTaskItem }) => {
+const AddTask = ({ addTaskItem, taskList }) => {
 
     const [taskName, setTaskName] = useState('') // Tracks the state of the input field to allow user input
 
@@ -14,23 +14,36 @@ const AddTask = ({ addTaskItem }) => {
 
     }
 
+    // ===================================== Add task ========================================
 
-    const addTask = (e) => { // Add task
+    const addTask = (e) => {
 
+        // Prevents the default action of refreshing the page
+        e.preventDefault()
 
-        e.preventDefault() // Prevents the default action of refreshing the page
+        // Maps a new array using the names in the taskList objects for duplicate comparison
+        const taskListName = taskList.map((taskItem) => (taskItem.name))
 
+        // If the user enters a string of 0 then
+        if (taskName.length === 0) {
 
-        if (taskName.length === 0) { // If the user enters a string of 0 then
+            // Ask user to enter a task name
+            alert("Please add a task name")
 
-            alert("Please add a task name") // Ask user to enter a task name
+            // If the user enters a task with the same name as an existing task
+        } else if (taskListName.includes(taskName)) {
 
-        } else {
+            // Alert task already exists
+            alert("Task already exists")
 
-            addTaskItem(taskName) // Call the function and pass the task name back to App
+        }
+        else {
 
+            // Call the function and pass the task name back to App
+            addTaskItem(taskName)
 
-            setTaskName('') // Clear the input field after submission
+            // Clear the input field after submission
+            setTaskName('')
 
         }
 

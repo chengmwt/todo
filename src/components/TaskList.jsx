@@ -3,6 +3,7 @@ import AddTask from './AddTask'
 import './TaskList.css'
 import TaskItem from './TaskItem'
 import ExpandCollapse from './ExpandCollapse'
+import SearchTask from './SearchTask'
 
 const TaskList = () => {
 
@@ -17,6 +18,9 @@ const TaskList = () => {
 
     const [hiddenCompletedList, setHiddenCompletedList] = useState(JSON.parse(localStorage.getItem('hiddenCompletedList')) ?? '')
 
+    // const [searchTaskName, setSearchTaskName] = useState('')
+
+    const [searchFilteredList, setSearchFilteredList] = useState([])
 
 
 
@@ -57,7 +61,7 @@ const TaskList = () => {
 
     const updateThisList = (newTaskList, list) => {
 
-        console.log(list)
+        console.log(newTaskList, list)
 
         if (list === 'task') {
 
@@ -98,6 +102,18 @@ const TaskList = () => {
     }
 
 
+    // =================================== Search Task ==================================
+
+
+    const searchList = (searchMatch) => {
+
+        console.log(searchMatch)
+        setSearchFilteredList(searchMatch)
+
+    }
+
+
+
     return (
 
         <div className='task-list_wrapper'>
@@ -111,24 +127,30 @@ const TaskList = () => {
 
                 <h1>To-do</h1>
 
-                <div className='spacer'><ExpandCollapse /></div>
+                <div className='search'>
+                    <SearchTask taskList={taskList} searchList={searchList} />
+                </div>
 
 
             </div>
 
 
             <div className="task_list">
-                <AddTask addTaskItem={addTaskItem} />
+                <AddTask addTaskItem={addTaskItem} taskList={taskList} />
                 <ul className={hiddenTaskList}>
-                    {taskList.map((taskItem) => (
-                        // Maps the taskList array with individual task items
+                    {searchFilteredList
 
-                        <TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />
-                    ))}
+                        ? (searchFilteredList.map((taskItem) => <TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
+
+                        : (taskList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />
+                        )))
+                    }
+
                 </ul>
             </div>
 
             <div className="list_header">
+
                 <div className="hide_button">
                     <ExpandCollapse className='hide_button' hidden={hiddenCompletedList} list={'completed'} hideList={hideList} />
                 </div>

@@ -9,8 +9,10 @@ import './App.css'
 // Add a completed list where the completed items automatically go ----------------- DONE
 // Add a clear completed list button ----------------------------------------------- DONE
 // Localstorage ------------------------------------------------------------------ DONE
-// Add expand and collapse
-// Add filter
+// Add expand and collapse ----------------------------------------------------- DONE
+// Add reminder function
+// Add search function
+// Prevent duplicate entries -------------------------------------------------------- DONE
 // Add sort
 // Redux?
 // Add React icons
