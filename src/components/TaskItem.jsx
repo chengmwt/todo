@@ -11,15 +11,17 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
 
     // ================================================ Edit task item ====================================================
 
-    const handleEditTaskName = (e) => {
-        setEditTaskName(e.target.value)
-    }
-
     const setEditingStatus = (editingStatus) => {
         setEditing(editingStatus)
     }
 
+    const handleEditTaskName = (e) => {
+        setEditTaskName(e.target.value)
+    }
+
     const editTask = (newTaskItem, id) => {
+
+        setEditTaskName(newTaskItem.name)
 
         // Get the index of the task item identified in the EditTask component
         const taskListIndex = thisList.findIndex((taskItem) => taskItem.id === id)
@@ -78,7 +80,6 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
         <li id={taskItem.id} className={taskItem.completed}>
             <div className="task_item">
                 <div className='task_name'>
-                    {/* {taskItem.name} */}
 
                     {editing
                         ? <div>
@@ -90,7 +91,7 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
 
                 </div>
                 <div className="task_buttons">
-                    <EditTask setEditingStatus={setEditingStatus} editTaskItem={editTask} id={taskItem.id} thisList={thisList} />
+                    <EditTask editTaskItem={editTask} setEditingStatus={setEditingStatus} id={taskItem.id} thisList={thisList} editTaskName={editTaskName} />
                     <DeleteTask deleteTaskItem={deleteTask} id={taskItem.id} thisList={thisList} />
                     <CompleteTask completeTaskItem={completeTask} id={taskItem.id} thisList={thisList} />
                 </div>
