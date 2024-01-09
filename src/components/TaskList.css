@@ -2,6 +2,12 @@
     width: 100%;
 }
 
+.buttons {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
 .completed_list {
     width: 100%;
 }

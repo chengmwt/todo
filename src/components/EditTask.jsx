@@ -57,7 +57,7 @@ const EditTask = ({ editTaskItem, setEditingStatus, id, thisList, editTaskName }
         </div>
 
     )
-    // () => editTask(newTaskItem)
+
 }
 
 export default EditTask

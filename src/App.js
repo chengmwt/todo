@@ -11,12 +11,13 @@ import './App.css'
 // Localstorage ------------------------------------------------------------------ DONE
 // Add expand and collapse ----------------------------------------------------- DONE
 // Add reminder function
-// Add search function
+// Add task filter function ------------------------------------------------------- DONE
 // Prevent duplicate entries -------------------------------------------------------- DONE
-// Add sort
+// Add sort ---------------------------------------------------------------------- DONE
 // Redux?
 // Add React icons
 // Styling blah blah blah
+// Add delete function to all list types (task, sorted, searching)
 
 
 

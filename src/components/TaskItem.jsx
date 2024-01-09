@@ -9,7 +9,7 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
     const [editing, setEditing] = useState(false)
     const [editTaskName, setEditTaskName] = useState(taskItem.name)
 
-    // ================================================ Edit task item ====================================================
+    // =============================== Edit task item =====================================
 
     const setEditingStatus = (editingStatus) => {
         setEditing(editingStatus)
@@ -36,7 +36,7 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
 
 
 
-    // ================================================= Delete task item =================================================
+    // ================================== Delete task item ===============================
     const deleteTask = (newTaskList) => {
 
         // Update the task list with the new task list from DeleteTask component
@@ -46,7 +46,7 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
 
 
 
-    // ================================================== Complete task item =============================================
+    // =========================== Complete task item ====================================
     const completeTask = (newTaskItem, id) => {
 
         console.log(newTaskItem)

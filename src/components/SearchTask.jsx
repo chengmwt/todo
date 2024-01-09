@@ -5,6 +5,7 @@ const SearchTask = ({ taskList, completedList, searchList }) => {
 
     const [searchTaskName, setSearchTaskName] = useState('')
 
+
     const handleSearchChange = (e) => {
 
         setSearchTaskName(e.target.value)
