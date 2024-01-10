@@ -7,21 +7,35 @@ const EditTask = ({ editTaskItem, setEditingStatus, id, thisList, editTaskName }
     // Get the task item object from the task list array
     const newTaskItem = thisList.find((taskItem) => taskItem.id === id)
 
+    // Track the state of visibility of the edit button
     const [showEditButton, setShowEditButton] = useState(true)
 
     // ==================================== Edit Task ====================================================
 
+    // when user clicks on the edit button, show the input
     const showInput = () => {
+
+        // pass the editing status to parent as true
         setEditingStatus(true)
+
+        // hide the edit button
         setShowEditButton(false)
     }
 
+    // when user clicks reject
     const rejectEdit = () => {
+
+        // pass the editing status to parent as false
         setEditingStatus(false)
+
+        // show the edit button
         setShowEditButton(true)
+
+        // pass the unedited object to parent
         editTaskItem(newTaskItem, id)
     }
 
+    // when user clicks accept
     const acceptEdit = () => {
 
         // If the user enters a string of 0 characters or clicks on Cancel then...
@@ -35,17 +49,18 @@ const EditTask = ({ editTaskItem, setEditingStatus, id, thisList, editTaskName }
             newTaskItem.name = editTaskName
         }
 
-        // call the editTaskItem function in the thisList component and pass the new task name and id
+        // pass the edited task item object to parent
         editTaskItem(newTaskItem, id)
 
+        // pass the editing status to parent as false
         setEditingStatus(false)
+
+        // show the edit button
         setShowEditButton(true)
     }
 
 
     return (
-
-        // Edit Task button
 
         <div>
 

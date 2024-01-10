@@ -6,21 +6,32 @@ import './TaskItem.css'
 
 const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList, list }) => {
 
+    // tracks the state of whether the user is editing
     const [editing, setEditing] = useState(false)
-    const [editTaskName, setEditTaskName] = useState(taskItem.name)
+
+    // tracks the value of the edit input
+    const [editTaskName, setEditTaskName] = useState('')
 
     // =============================== Edit task item =====================================
 
     const setEditingStatus = (editingStatus) => {
+
+        // sets the default value of the input to be the same as the task item name
+        setEditTaskName(taskItem.name)
+
+        // sets editing status to true
         setEditing(editingStatus)
     }
 
     const handleEditTaskName = (e) => {
+
         setEditTaskName(e.target.value)
+
     }
 
     const editTask = (newTaskItem, id) => {
 
+        // sets the state of task name to name passed from child
         setEditTaskName(newTaskItem.name)
 
         // Get the index of the task item identified in the EditTask component
@@ -49,24 +60,25 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
     // =========================== Complete task item ====================================
     const completeTask = (newTaskItem, id) => {
 
-        console.log(newTaskItem)
-
+        // if the task item object has a property of compeleted
         if (newTaskItem.hasOwnProperty('completed')) {
 
+            // filter it out of the task list
             const newTaskList = taskList.filter((taskItem) => taskItem.id !== id)
             updateThisList(newTaskList, 'task')
 
+            // add it to the completed list
             const newCompletedList = ([...completedList, newTaskItem])
             updateThisList(newCompletedList, 'completed')
 
-            console.log(thisList)
-            console.log('completed')
-
+            // if the task item object does not have property of completed
         } else {
 
+            // filter it out of the completed list
             const newCompletedList = completedList.filter((taskItem) => taskItem.id !== id)
             updateThisList(newCompletedList, 'completed')
 
+            // add it to the task list
             const newTaskList = ([...taskList, newTaskItem])
             updateThisList(newTaskList, 'task')
 
@@ -81,15 +93,18 @@ const TaskItem = ({ taskItem, updateThisList, taskList, completedList, thisList,
             <div className="task_item">
                 <div className='task_name'>
 
-                    {editing
-                        ? <div>
+                    {editing ? // if editing status is true
+                        <div>
+                            {/* show input */}
                             <input type='text' value={editTaskName} onChange={handleEditTaskName} />
 
-                        </div>
-                        : taskItem.name
+                        </div> : // otherwise show the task item name
+                        taskItem.name
                     }
 
                 </div>
+
+
                 <div className="task_buttons">
                     <EditTask editTaskItem={editTask} setEditingStatus={setEditingStatus} id={taskItem.id} thisList={thisList} editTaskName={editTaskName} />
                     <DeleteTask deleteTaskItem={deleteTask} id={taskItem.id} thisList={thisList} />

@@ -2,40 +2,47 @@ import React, { useState } from 'react'
 import { FcAlphabeticalSortingAz } from "react-icons/fc";
 import { FcAlphabeticalSortingZa } from "react-icons/fc";
 
-const SortTask = ({ taskList, updateThisList, sortList }) => {
+const SortTask = ({ list, sortOrder }) => {
 
-    const [sort, setSort] = useState('Dsc')
+    // Tracks state of sorting
+    const [sortBy, setSortBy] = useState('')
 
-    let sortTaskList = [...taskList]
 
+    // if sorted by ascending
     const sortAsc = () => {
 
-        // const sortedTaskListAsc = sortTaskList.sort(({ name: a }, { name: b }) => a - b)
-        // sortList(sortedTaskListAsc)
-        setSort('Asc')
+        // set sort state as ascending
+        setSortBy('Asc')
+        // pass sort order and applicable list to parent
+        sortOrder('Asc', list)
     }
 
     const sortDsc = () => {
-        // const sortedTaskListDsc = sortTaskList.sort(({ name: a }, { name: b }) => b - a)
-        // sortList(sortedTaskListDsc)
-        setSort('Dsc')
+
+        // set sort state as descending
+        setSortBy('Dsc')
+        // pass sort order and applicable list to parent
+        sortOrder('Dsc', list)
+
     }
 
     return (
+
         <div>
-            {(sort === 'Asc') ?
-                < button onClick={sortDsc} > <FcAlphabeticalSortingZa /></button >
+
+            {(sortBy === 'Asc') ?
+                < button onClick={sortDsc} > <FcAlphabeticalSortingAz /></button >
                 :
-                (sort === 'Dsc') ?
-                    < button onClick={sortAsc} > <FcAlphabeticalSortingAz /></button >
+                (sortBy === 'Dsc') ?
+                    < button onClick={sortAsc} > <FcAlphabeticalSortingZa /></button >
                     :
                     < button onClick={sortAsc} > <FcAlphabeticalSortingAz /></button >}
 
         </div>
 
-
-
     )
 }
 
 export default SortTask
+
+

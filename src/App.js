@@ -16,7 +16,7 @@ import './App.css'
 // Add sort ---------------------------------------------------------------------- DONE
 // Redux?
 // Fix Edit Task: when showInput, shows previous value
-// Fix Delete Task: deleted task does not reflect on sorted or filtered list
+// Fix Delete Task: deleted task does not reflect on sorted or filtered list --- Fixed by applying .filter and .sort directly in the DOM instead of tracking state of multiple arrays
 // Add React icons
 // Styling blah blah blah
 // Add delete function to all list types (task, sorted, searching)

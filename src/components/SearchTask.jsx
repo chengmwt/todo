@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import './SearchTask.css'
 
-const SearchTask = ({ taskList, completedList, searchList, updateThisList }) => {
+const SearchTask = ({ isSearching }) => {
 
+    // set state for user input
     const [searchTaskName, setSearchTaskName] = useState('')
 
-
+    // handles user input
     const handleSearchChange = (e) => {
 
         setSearchTaskName(e.target.value)
@@ -15,15 +16,20 @@ const SearchTask = ({ taskList, completedList, searchList, updateThisList }) => 
 
     useEffect(() => {
 
-        const searchTaskMatch = taskList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
+        // if length of input > 0
+        if (searchTaskName.length !== 0) {
 
-        const searchCompletedMatch = completedList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
+            // set searching = true and send searchTaskName to parent
+            isSearching(true, searchTaskName)
 
-        searchList(searchTaskMatch, searchCompletedMatch, searchTaskName)
+        } else {
 
+            // set searching = false
+            isSearching(false)
 
+        }
 
-
+        // every time that the input is changed
     }, [searchTaskName])
 
 

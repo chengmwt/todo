@@ -23,56 +23,53 @@ const TaskList = () => {
     // Tracks state of expanded/collapsed completed task list
     const [hiddenCompletedList, setHiddenCompletedList] = useState(JSON.parse(localStorage.getItem('hiddenCompletedList')) ?? '')
 
-    // Tracks state of search input to change list to filtered list
+    // Tracks state of search input to display filtered list
     const [searching, setSearching] = useState(false)
 
-    // Tracks the filtered task list
-    const [searchTaskFilteredList, setSearchTaskFilteredList] = useState([])
-
-    // Tracks the filtered completed task list
-    const [searchCompletedFilteredList, setSearchCompletedFilteredList] = useState([])
-
-    // Tracks state of sorting to change list to sorted list
-    const [sorting, setSorting] = useState(false)
-
-    // Tracks sorted list
-    const [sortedList, setSortedList] = useState([])
-
+    // Tracks the state of the search input
     const [searchTaskName, setSearchTaskName] = useState('')
 
+    // Tracks the sorting order of the task list
     const [taskListSortBy, setTaskListSortBy] = useState('')
 
+    // Tracks the sorting order of the completed list
     const [completedListSortBy, setCompletedListSortBy] = useState('')
 
 
     // =================================== Localstorage ==================================
 
-
+    // Stores the tasklist
     useEffect(() => {
         localStorage.setItem('taskList', JSON.stringify(taskList))
     }, [taskList])
 
+    // Stores the completed list
     useEffect(() => {
         localStorage.setItem('completedList', JSON.stringify(completedList))
     }, [completedList])
 
+    // Stores the state of expand/collapse of the task list
     useEffect(() => {
         localStorage.setItem('hiddenTaskList', JSON.stringify(hiddenTaskList))
     }, [hiddenTaskList])
 
+    // Stores the state of expand/collapse of the completed list
     useEffect(() => {
         localStorage.setItem('hiddenCompletedList', JSON.stringify(hiddenCompletedList))
     }, [hiddenCompletedList])
 
 
     // ==================================== Add Task ======================================
+
     const addTaskItem = (taskName) => {
 
+        // Takes the task name entered by the user and assigns it a random number for an id
         const taskItem = {
             name: taskName,
             id: Math.random(),
         }
 
+        // Tacks on the task item to the existing task list array
         setTaskList([...taskList, taskItem])
 
     }
@@ -80,38 +77,24 @@ const TaskList = () => {
 
     // ================================== Update List ====================================
 
-    const updateThisList = (newTaskList, list, mutated) => {
+    const updateThisList = (newTaskList, list) => {
 
-
-        console.log(newTaskList, list)
-
+        // if list is task
         if (list === 'task') {
 
             // Updates the taskList
-            setSorting(false)
             setTaskList(newTaskList)
 
-            console.log('tasklist')
-
+            // if list is completed
         } else {
 
             // Updates the completedList
             setCompletedList(newTaskList)
 
         }
-
     }
 
 
-    useEffect(() => {
-        const force = searchTaskFilteredList
-        const force2 = sortedList
-        setSearchTaskFilteredList([...force])
-        setSortedList([...force2])
-        console.log(taskList)
-        console.log(searchTaskFilteredList)
-        console.log(sortedList)
-    }, [taskList])
 
 
     // ======================================== Clear completed ==========================
@@ -119,6 +102,7 @@ const TaskList = () => {
     const clearCompleted = () => {
         setCompletedList([])
     }
+
 
 
     // ============================ Expand/Collaspse list ============================
@@ -141,38 +125,25 @@ const TaskList = () => {
     // =================================== Search Task ==================================
 
 
-    const handleSearchChange = (e) => {
+    const isSearching = (searching, searchTaskName) => {
 
-        setSearchTaskName(e.target.value)
+        // sets the state of whether user is searching
+        setSearching(searching)
+
+        // sets the value of search to user's input
+        setSearchTaskName(searchTaskName)
 
     }
-
-    useEffect(() => {
-
-        if (searchTaskName.length !== 0) {
-
-            setSearching(true)
-            taskList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
-
-            completedList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
-
-
-        } else {
-            setSearching(false)
-        }
-
-    }, [searchTaskName])
-
 
 
     // ====================================== Sort Tasks ================================
 
-    const setSortOrder = (list) => {
+    const sortOrder = (order, list) => {
 
         if (list === 'task') {
-            taskListSortBy === 'Dsc' ? setTaskListSortBy('Asc') : taskListSortBy === 'Asc' ? setTaskListSortBy('Dsc') : setTaskListSortBy('Asc')
+            setTaskListSortBy(order)
         } else {
-            completedListSortBy === 'Dsc' ? setCompletedListSortBy('Asc') : completedListSortBy === 'Asc' ? setCompletedListSortBy('Dsc') : setCompletedListSortBy('Asc')
+            setCompletedListSortBy(order)
         }
     }
 
@@ -185,18 +156,17 @@ const TaskList = () => {
 
             <div className="list_header">
                 <div className='hide_button buttons'>
-                    <ExpandCollapse hidden={hiddenTaskList} list={'task'} hideList={hideList} />
 
-                    <button onClick={() => setSortOrder('task')}>Sort By</button>
+                    <ExpandCollapse hidden={hiddenTaskList} list={'task'} hideList={hideList} />
+                    <SortTask list={'task'} sortOrder={sortOrder} />
+
                 </div>
 
                 <h1>To-do</h1>
 
                 <div className='search'>
-
-                    <input type="text" value={searchTaskName} onChange={handleSearchChange} />
+                    <SearchTask isSearching={isSearching} />
                 </div>
-
 
             </div>
 
@@ -205,30 +175,32 @@ const TaskList = () => {
                 <AddTask addTaskItem={addTaskItem} taskList={taskList} />
                 <ul className={hiddenTaskList}>
 
-                    {searching ?
+
+                    {searching ? // if searching is true
+                        // Then filter the tasks that include the searchTaskName
                         taskList.filter((taskItemName) => taskItemName.name.includes(searchTaskName)).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
 
-                        : (taskListSortBy === 'Asc') ?
+                        : (taskListSortBy === 'Asc') ? // if task list sorted ascending
 
                             taskList.sort(({ name: a }, { name: b }) => a - b).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
 
-                            : (taskListSortBy === 'Dsc') ?
+                            : (taskListSortBy === 'Dsc') ? // if task list sorted descending
 
                                 taskList.sort(({ name: a }, { name: b }) => b - a).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
 
-                                :
+                                : // if no sort and no filter
                                 (taskList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />
                                 )))
                     }
-
                 </ul>
             </div>
 
+
             <div className="list_header">
 
-                <div className="hide_button">
+                <div className="hide_button buttons">
                     <ExpandCollapse className='hide_button' hidden={hiddenCompletedList} list={'completed'} hideList={hideList} />
-                    <button onClick={() => setSortOrder('completed')}>Sort By</button>
+                    <SortTask list={'completed'} sortOrder={sortOrder} />
                 </div>
                 <h1>Completed</h1>
                 <div className="clear_all">
