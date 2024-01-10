@@ -15,6 +15,8 @@ import './App.css'
 // Prevent duplicate entries -------------------------------------------------------- DONE
 // Add sort ---------------------------------------------------------------------- DONE
 // Redux?
+// Fix Edit Task: when showInput, shows previous value
+// Fix Delete Task: deleted task does not reflect on sorted or filtered list
 // Add React icons
 // Styling blah blah blah
 // Add delete function to all list types (task, sorted, searching)

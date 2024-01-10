@@ -26,8 +26,6 @@ const TaskList = () => {
     // Tracks state of search input to change list to filtered list
     const [searching, setSearching] = useState(false)
 
-    const [searchTaskName, setSearchTaskName] = useState('')
-
     // Tracks the filtered task list
     const [searchTaskFilteredList, setSearchTaskFilteredList] = useState([])
 
@@ -40,6 +38,11 @@ const TaskList = () => {
     // Tracks sorted list
     const [sortedList, setSortedList] = useState([])
 
+    const [searchTaskName, setSearchTaskName] = useState('')
+
+    const [taskListSortBy, setTaskListSortBy] = useState('')
+
+    const [completedListSortBy, setCompletedListSortBy] = useState('')
 
 
     // =================================== Localstorage ==================================
@@ -77,7 +80,7 @@ const TaskList = () => {
 
     // ================================== Update List ====================================
 
-    const updateThisList = (newTaskList, list) => {
+    const updateThisList = (newTaskList, list, mutated) => {
 
 
         console.log(newTaskList, list)
@@ -85,8 +88,10 @@ const TaskList = () => {
         if (list === 'task') {
 
             // Updates the taskList
+            setSorting(false)
             setTaskList(newTaskList)
 
+            console.log('tasklist')
 
         } else {
 
@@ -96,6 +101,17 @@ const TaskList = () => {
         }
 
     }
+
+
+    useEffect(() => {
+        const force = searchTaskFilteredList
+        const force2 = sortedList
+        setSearchTaskFilteredList([...force])
+        setSortedList([...force2])
+        console.log(taskList)
+        console.log(searchTaskFilteredList)
+        console.log(sortedList)
+    }, [taskList])
 
 
     // ======================================== Clear completed ==========================
@@ -125,30 +141,39 @@ const TaskList = () => {
     // =================================== Search Task ==================================
 
 
-    const searchList = (searchTaskMatch, searchCompletedMatch, searchTaskName) => {
+    const handleSearchChange = (e) => {
+
+        setSearchTaskName(e.target.value)
+
+    }
+
+    useEffect(() => {
 
         if (searchTaskName.length !== 0) {
 
             setSearching(true)
-            setSearchTaskFilteredList(searchTaskMatch)
-            setSearchCompletedFilteredList(searchCompletedMatch)
+            taskList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
+
+            completedList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
+
+
         } else {
             setSearching(false)
         }
 
-
-
-    }
+    }, [searchTaskName])
 
 
 
     // ====================================== Sort Tasks ================================
 
-    const sortList = (sortList) => {
+    const setSortOrder = (list) => {
 
-        setSorting(true)
-        setSortedList(sortList)
-
+        if (list === 'task') {
+            taskListSortBy === 'Dsc' ? setTaskListSortBy('Asc') : taskListSortBy === 'Asc' ? setTaskListSortBy('Dsc') : setTaskListSortBy('Asc')
+        } else {
+            completedListSortBy === 'Dsc' ? setCompletedListSortBy('Asc') : completedListSortBy === 'Asc' ? setCompletedListSortBy('Dsc') : setCompletedListSortBy('Asc')
+        }
     }
 
 
@@ -161,13 +186,15 @@ const TaskList = () => {
             <div className="list_header">
                 <div className='hide_button buttons'>
                     <ExpandCollapse hidden={hiddenTaskList} list={'task'} hideList={hideList} />
-                    <SortTask taskList={taskList} updateThisList={updateThisList} sortList={sortList} />
+
+                    <button onClick={() => setSortOrder('task')}>Sort By</button>
                 </div>
 
                 <h1>To-do</h1>
 
                 <div className='search'>
-                    <SearchTask taskList={taskList} completedList={completedList} searchList={searchList} />
+
+                    <input type="text" value={searchTaskName} onChange={handleSearchChange} />
                 </div>
 
 
@@ -179,14 +206,19 @@ const TaskList = () => {
                 <ul className={hiddenTaskList}>
 
                     {searching ?
-                        (searchTaskFilteredList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />)))
+                        taskList.filter((taskItemName) => taskItemName.name.includes(searchTaskName)).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
 
-                        : sorting ?
-                            (sortedList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />)))
+                        : (taskListSortBy === 'Asc') ?
 
-                            :
-                            (taskList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />
-                            )))
+                            taskList.sort(({ name: a }, { name: b }) => a - b).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
+
+                            : (taskListSortBy === 'Dsc') ?
+
+                                taskList.sort(({ name: a }, { name: b }) => b - a).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />))
+
+                                :
+                                (taskList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />
+                                )))
                     }
 
                 </ul>
@@ -196,6 +228,7 @@ const TaskList = () => {
 
                 <div className="hide_button">
                     <ExpandCollapse className='hide_button' hidden={hiddenCompletedList} list={'completed'} hideList={hideList} />
+                    <button onClick={() => setSortOrder('completed')}>Sort By</button>
                 </div>
                 <h1>Completed</h1>
                 <div className="clear_all">
@@ -210,17 +243,21 @@ const TaskList = () => {
 
                 <ul className={hiddenCompletedList}>
 
-                    {searching
+                    {searching ?
+                        completedList.filter((taskItemName) => taskItemName.name.includes(searchTaskName)).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={completedList} list={'completed'} />))
 
-                        ? (searchCompletedFilteredList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={taskList} list={'task'} />)))
+                        : (completedListSortBy === 'Asc') ?
 
-                        : (completedList.map((taskItem) => (
-                            // Maps the completedList array with individual task items
+                            completedList.sort(({ name: a }, { name: b }) => a - b).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={completedList} list={'completed'} />))
 
-                            <TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={completedList} list={'completed'} />
-                        )))
+                            : (completedListSortBy === 'Dsc') ?
+
+                                completedList.sort(({ name: a }, { name: b }) => b - a).map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={completedList} list={'completed'} />))
+
+                                :
+                                (completedList.map((taskItem) => (<TaskItem taskItem={taskItem} updateThisList={updateThisList} taskList={taskList} completedList={completedList} thisList={completedList} list={'completed'} />
+                                )))
                     }
-
 
                 </ul>
             </div>

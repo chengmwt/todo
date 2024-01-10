@@ -10,14 +10,14 @@ const SortTask = ({ taskList, updateThisList, sortList }) => {
 
     const sortAsc = () => {
 
-        const sortedTaskListAsc = sortTaskList.sort(({ name: a }, { name: b }) => a - b)
-        sortList(sortedTaskListAsc)
+        // const sortedTaskListAsc = sortTaskList.sort(({ name: a }, { name: b }) => a - b)
+        // sortList(sortedTaskListAsc)
         setSort('Asc')
     }
 
     const sortDsc = () => {
-        const sortedTaskListDsc = sortTaskList.sort(({ name: a }, { name: b }) => b - a)
-        sortList(sortedTaskListDsc)
+        // const sortedTaskListDsc = sortTaskList.sort(({ name: a }, { name: b }) => b - a)
+        // sortList(sortedTaskListDsc)
         setSort('Dsc')
     }
 

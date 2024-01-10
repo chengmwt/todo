@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './SearchTask.css'
 
-const SearchTask = ({ taskList, completedList, searchList }) => {
+const SearchTask = ({ taskList, completedList, searchList, updateThisList }) => {
 
     const [searchTaskName, setSearchTaskName] = useState('')
 
@@ -20,6 +20,9 @@ const SearchTask = ({ taskList, completedList, searchList }) => {
         const searchCompletedMatch = completedList.filter((taskItemName) => taskItemName.name.includes(searchTaskName))
 
         searchList(searchTaskMatch, searchCompletedMatch, searchTaskName)
+
+
+
 
     }, [searchTaskName])
 
